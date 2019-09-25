@@ -1,23 +1,76 @@
 // (Sept. 2019) NODE CURRENTLY DOES NOT ACCEPT ES6 SYNTAX 
 
-
-// validator library valids format of a string
-const validator = require('validator'); // store all contents of validator package into the variable
-
-
-console.log('try@yahoo.com:', validator.isEmail('try@yahoo.com')); // returns true
-console.log('this is a correct email format@gmail.com:', validator.isEmail('this is a correct email format@gmail.com')); // false (due to spaces)
-
-console.log("https://www.yahoo.com:", validator.isURL("https://www.yahoo.com")); // returns true
-console.log("https/www.yahoo.com:", validator.isURL("https/www.yahoo.com")); // returns false
-  
-console.log("www.yugioh.com:", validator.isURL("www.yugioh.com")); // returns true
-console.log("amazon.com:", validator.isURL("amazon.com")); // returns true
-
-
-
 const chalk = require('chalk');
-// prints "Success!" in green in the terminal
-console.log(chalk.green("Success!"));
-console.log(chalk.bold.red("Error!")); // makes "Error bold and red"
-console.log(chalk.inverse.red("Error!")); // inverse makes the background color of choice
+const yargs = require('yargs');
+const notes = require('./notes');
+
+
+
+// yargs.version('1.1.0');
+// insert into terminal inputs
+
+// create add command
+yargs.command({
+    command: 'add',
+    describe: 'Add a new note',
+    body: {
+        describe: 'add body description',
+        demandOption: true,
+        type: 'string'
+    },
+    builder: {
+      title: {
+          describe: 'Note title',
+          demandOption: true, // requires that the user puts a title (false by default)
+          type: 'string' // requires that the title must always be a string
+      }  
+    },
+    handler(argv) {
+        notes.addNote(argv.title, argv.body);
+    }
+});
+
+// create remove command
+yargs.command({
+    command: 'remove',
+    describe: 'remove a note',
+    builder: {
+        title: {
+            describe: 'Note title',
+            demandOption: true,
+            type: 'string'
+        }
+    },
+    handler(argv) {
+        notes.removeNote(argv.title);
+    }
+})
+
+// create list command
+yargs.command({
+    command: 'list',
+    describe: 'list the notes',
+    handler(argv) {
+        notes.listNotes(argv.title);
+    }
+})
+
+// create read command
+yargs.command({
+    command: 'read',
+    describe: 'reading a note',
+    builder: {
+        title: {
+            describe: 'Read note',
+            demandOption: true,
+            type: 'string'
+        }
+    },
+    handler(argv) {
+        notes.readNote(argv.title);
+    }
+})
+
+// calling yargs.argv triggers the commands
+// console.log(yargs.argv); // returns object with variables as keys and value as values
+yargs.parse() // functions as yargs.argv
