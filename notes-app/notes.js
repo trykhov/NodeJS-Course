@@ -6,6 +6,12 @@ const getNotes = () =>  "Your notes....";
 const addNote = (title, body) => {
     const notes = loadNotes(); // loaded the notes 
     const duplicateNotes = notes.filter(note => note.title === title); // check if a title has already been taken
+
+    // debugger (use this keyword to stop the program in URL chrome://inspect to look at code)
+    // run: node inspect (<file name> <command>)
+    // enter URL in Chrome browser chrome://inspect
+    // enter "restart" in terminal to restart debugging process
+
     if(!duplicateNotes.length) {
         notes.push({  // pushing the notes into the array
             title: title,
