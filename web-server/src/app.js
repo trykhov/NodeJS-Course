@@ -1,5 +1,6 @@
-const path = require('path'); // provides methods that allow for easy manipulation of string paths
+const hbs = require('hbs'); // in order to work hbs with nodemon, enter in terminal "nodemon src/app.js -e js,hbs"
 const express = require('express'); // express is a function
+const path = require('path'); // provides methods that allow for easy manipulation of string paths
 
 // console.log(__dirname);
 // console.log(__filename);
@@ -8,12 +9,18 @@ const express = require('express'); // express is a function
 
 const app = express();
 
+// Define paths for Express config
 const combinePath = path.join(__dirname, '../public'); // path.join takes two paths and joins them together
 // console.log(combinePath) // returns [root directory/..../web-server/public]
+// express expects a folder titled "views" in your src path by default
+// we are changing that with the code below to allow a folder titled "templates" to be read by express
+const viewsPath = path.join(__dirname, '../templates/views'); 
+const partialsPath = path.join(__dirname, '../templates/partials');
 
-
+// Setup handlebars engine and views location
 app.set('view engine', 'hbs'); // looks for index.hbs file in your public folder
-
+app.set('views', viewsPath); // now it expects to find the folder named "templates"
+hbs.registerPartials(partialsPath);
 
 // static takes path of server
 // you now have access to all the files in the public folder
@@ -37,7 +44,9 @@ app.get('/about', (req, res) => {
 
 app.get('/help', (req, res) => {
     res.render('help', {
-        helpText: 'This is the help text'
+        helpText: 'This is the help text',
+        title: 'Help',
+        name: 'Try'
     });
 })
 
@@ -63,7 +72,26 @@ app.get('/weather', (req, res) => {
         forecast: 'sunny',
         location: 'here'
     })
+});
+
+// if user can't find anything in the help page
+app.get('/help/*', (req, res) => {
+    res.render('404', {
+        errorMessage: 'Help article not found',
+        name: 'Try',
+        title: '404'
+    })
 })
+
+// the wildcard * tells the routes to match with anything that hasn't been assigned before (above routes)
+// needs to be last because of how express looks for routes (first public folder then routes in other get methods)
+app.get('*', (req, res) => {
+    res.render('404', {
+        errorMessage: 'My 404 page',
+        name: 'Try',
+        title: '404'
+    })
+});
 
 app.listen(3000, () => {
     console.log('Server is up on port 3000');
