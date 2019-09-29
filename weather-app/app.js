@@ -1,9 +1,34 @@
-const request = require('request');
+const chalk = require('chalk');
+const forecast = require('./utils/forecast');
+const geocode = require('./utils/geocode');
+const yargs = require('yargs');
 
-const url = "https://api.darksky.net/forecast/425c757e3161ac4af56d9aceb0d76089/37.8267,-122.4233";
 
-request({ url: url }, (err, res) => {
-    const data = JSON.parse(res.body);
-    console.log(data);
-    
-})
+yargs.command({
+    command: 'enterCityName',
+    builder: {
+        city: {
+            demandOption: true,
+            type: 'string'
+        }
+    },
+    handler(argv) {
+        geocode(argv.city, (err, data) => {
+            const {longitude, latitude, location} = data;
+            if(err) {
+                return console.log(err);
+            } 
+            forecast(longitude, latitude, (err, forecastData) => {
+                if(err) {
+                    return console.log(err);
+                }
+                console.log(chalk.magenta(location));
+                console.log(chalk.green(forecastData));
+            });
+        })
+    }
+});
+
+yargs.parse();
+
+// enter into terminal: node app.js <command> --<builder.[variable name]>=<input>
