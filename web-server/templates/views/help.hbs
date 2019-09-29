@@ -4,12 +4,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+    <link rel="icon" href="/img/weather.png">
+    <link rel="stylesheet" href="/css/styles.css">
+    <title>Help</title>
 </head>
 <body>
-    {{!-- takes all the content from the header.hbs file and puts it in header --}}
-    {{>header}}
-    <h1>{{helpText}}</h1>
+    <div class="main-content">
+        {{!-- takes all the content from the header.hbs file and puts it in header --}}
+        {{>header}}
+        <h1>{{helpText}}</h1>
+    </div>
+
     {{>footer}}
 </body>
 </html>
