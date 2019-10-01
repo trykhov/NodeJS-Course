@@ -68,9 +68,33 @@ app.get('/help', (req, res) => {
 // });
 
 app.get('/weather', (req, res) => {
-    res.send({
-        forecast: 'sunny',
-        location: 'here'
+    if(!req.query.address) {
+        return res.send({
+            error: "You must send an address"
+        })
+    } else {
+        res.send({
+            forecast: 'sunny',
+            address: req.query.address
+        })
+    }
+});
+
+ 
+
+app.get('/products', (req, res) => {
+    // can enter url: localhost:3000/products?(can enter variables after ?)
+    // the thing after the ? is called a query with the property of req
+    // console.log(req.query) // ex. localhost:3000/products?search=games&games=5 ==> {search: 'games', games: 5}
+
+    if(!req.query.search) { // when req.query.search is null
+        return res.send({ // return to stop the execute and prevent the second res.send from being called
+            error: "You must provide a search term"
+        })
+    }
+
+    res.send({ // can't send headers after they are sent to the client
+        products: []
     })
 });
 
