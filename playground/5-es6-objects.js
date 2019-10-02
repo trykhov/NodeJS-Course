@@ -29,7 +29,8 @@ const { label, price } = product;
 // console.log(label, price);
 
 // can be destructed in the function definition
-const transcation = (type, { label, stock }) => {
+const transcation = (type, { label, stock = 0 } = {}) => {
+    // have default value in case no object is provided (prevents code from crashing)
     console.log(label, stock)
 }
 
