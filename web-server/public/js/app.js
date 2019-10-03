@@ -1,34 +1,28 @@
-console.log("hello");
-
 
 const weatherForm = document.querySelector('form');
-const search = document.querySelector('input'); // stores input value that user uses
+const search = document.querySelector('input');
 const messageOne = document.getElementById('message-1');
 const messageTwo = document.getElementById('message-2');
 
-
-// messageOne.textContent = "Hello";
-
-weatherForm.addEventListener('submit', e => { // calls when user clicks on "submit" button
-    e.preventDefault(); // prevents reloading after pressing submit
-    messageOne.textContent = "Loading...";
-    messageTwo.textContent = ""; 
-    const location = search.value; // gets search value
-    fetch(`http://localhost:3000/weather?address=${location}`)  // taking url from the localhost SERVER & making a request
-        .then(response => {
-            response.json().then(data => {
-                if(data.err) {
-                    messageOne.textContent = data.err;
-                } else {
-                    messageOne.textContent = data.location;
-                    messageTwo.textContent = data.forecast;
-                }
-            }).catch(responseError => { 
-                messageOne.textContent = responseError;
-                console.log("Error in response.json(), responseError is: " + responseError)
-            })
-        }).catch(err => { 
+weatherForm.addEventListener('submit', e => {
+    e.preventDefault(); // prevents page from reloading after pressing submit
+    messageOne.textContent = "Loading..." // will change after successful fetch
+    messageTwo.textContent = "";
+    const location = search.value;
+    fetch(`http://localhost:3000/weather?address=${location}`).then(response => {
+        response.json().then(data => {
+            if(data.error) {
+                messageOne.textContent = data.error;
+            } else {
+                messageOne.textContent = data.location;
+                messageTwo.textContent = data.forecast;
+            }
+        }).catch(err => {
             messageOne.textContent = err;
-            console.log("Error in fetching, err is " + err) 
-        });
+            console.log("Json error: " + err);
+        })
+    }).catch(error => {
+        messageOne.textContent = error;
+        console.log("Fetch error: " + error);
+    })
 })

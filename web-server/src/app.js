@@ -1,14 +1,8 @@
-// roadmap: run the backend script (this file), it renders the hbs files which allows the front-end to connect to the backend
-//          the front-end has scripts that will take data and make a request to the backend server
-//          backend server returns info & the scripts in the front-end will do whatever to that data
-
-
+const express = require('express'); // express is a function
 const forecast = require('./utils/forecast');
 const geocode = require('./utils/geocode');
 const hbs = require('hbs'); // in order to work hbs with nodemon, enter in terminal "nodemon src/app.js -e js,hbs"
-const express = require('express'); // express is a function
 const path = require('path'); // provides methods that allow for easy manipulation of string paths
-
 // console.log(__dirname);
 // console.log(__filename);
 // console.log(path.join(__dirname, '../public')); 
@@ -36,14 +30,14 @@ app.use(express.static(path.join(__dirname, '../public')))
 
 
 app.get('', (req, res) => {
-    res.render('index', { // rendering the index.hbs
+    res.render('index', {
         title: 'Weather App', // allows you to inject value into template
         name: 'Try'
     }) //renders the index file
 });
 
 app.get('/about', (req, res) => {
-    res.render('about', { // rendering the about.hbs
+    res.render('about', {
         title: 'About Me',
         name: 'Try'
     });
@@ -79,23 +73,18 @@ app.get('/weather', (req, res) => {
         return res.send({
             error: "You must send an address"
         })
-    } else {
-        geocode(req.query.address, (err, {longitude, latitude, location} = {}) => { 
-            if(err) {
-                return res.send({ err });
-            } 
-            forecast(longitude, latitude, (err, forecastData) => {
-                if(err) {
-                    return res.send({ err });
-                }
-                res.send({
-                    location,
-                    forecast: forecastData,
-                    address: req.query.address
-                });
+    } 
+    geocode(req.query.address, (error, {latitude, longitude, location} = {}) => {
+        if(error) return res.send({ error });
+        forecast(longitude, latitude, (error, forecastData) => {
+            if(error) return res.send({ error });
+            res.send({
+                address: req.query.address,
+                forecast: forecastData,
+                location
             })
         })
-    }
+    })
 });
 
  
