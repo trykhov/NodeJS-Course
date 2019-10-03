@@ -1,3 +1,7 @@
+// roadmap: run the backend script (this file), it renders the hbs files which allows the front-end to connect to the backend
+//          the front-end has scripts that will take data and make a request to the backend server
+//          backend server returns info & the scripts in the front-end will do whatever to that data
+
 const express = require('express'); // express is a function
 const forecast = require('./utils/forecast');
 const geocode = require('./utils/geocode');
