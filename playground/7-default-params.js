@@ -1,4 +1,3 @@
-Learn more or give us feedback
 const greeter = (name = 'Try', age) => {
     console.log(`Hello ${name}`);
 }
