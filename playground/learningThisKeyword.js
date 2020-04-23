@@ -1,4 +1,4 @@
-let test = {
+const test = {
     title: 'a',
     showObject: function() { // will refer to object
         console.log(this); 
@@ -33,3 +33,12 @@ obj1.bike() // Tiger
 obj2.bike() // Wolf
 
 outsideObject.bind(obj1)() // returns obj1
+
+function makeFunc() {
+    var name = 'Mozilla';
+    function displayName() {
+      console.log(name);
+    }
+    return displayName;
+  }
+  

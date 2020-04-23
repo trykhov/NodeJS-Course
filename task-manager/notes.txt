@@ -1,0 +1,5 @@
+To load the port server to connect to the database, enter in terminal:
+
+In root directory:
+/Users/tryckhov/mongodb/bin/mongod --dbpath=/Users/tryckhov/mongodb-data/
+
